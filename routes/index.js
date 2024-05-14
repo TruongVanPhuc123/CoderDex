@@ -1,9 +1,10 @@
+require("dotenv").config();
 var express = require('express');
 var router = express.Router();
 const fs = require('fs');
 
 /* GET all pokemon */
-router.get('/', function (req, res, next) {
+router.get('/pokemons', function (req, res, next) {
   try {
     // change list pokemon in db.json as JavaScript object
     const data = JSON.parse(fs.readFileSync("db.json", 'utf8'));
