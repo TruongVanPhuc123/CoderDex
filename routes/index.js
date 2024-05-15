@@ -7,7 +7,7 @@ const fs = require('fs');
 router.get('/pokemons', function (req, res, next) {
   try {
     // change list pokemon in db.json as JavaScript object
-    const data = JSON.parse(fs.readFileSync("db.json", 'utf8'));
+    const dataInDBJSON = JSON.parse(fs.readFileSync("db.json", 'utf8'));
 
     // get query from request
     const { url, query } = req
@@ -17,9 +17,10 @@ router.get('/pokemons', function (req, res, next) {
     let typeSearch = query.type
     // let newTypeSearch = typeSearch[0].toUpperCase() + typeSearch.slice(1)
 
-    const element = data.products
+    const element = dataInDBJSON.data
+    // console.log(element)
     const newElement = element.map(element => {
-      return element.element
+      return element
     })
 
     // genres type
@@ -28,10 +29,11 @@ router.get('/pokemons', function (req, res, next) {
     newDataType = new Set(newType.map(element => element))
     // console.log(newDataType)
 
+
     // filter pokemon name === query search
-    const pokemonSearchName = newElement.filter(pokemon => pokemon.Name === querySearch)
-    // console.log(newTypeSearch)
-    // console.log(pokemonSearchType)
+    const pokemonElement = newElement.filter((pokemon) => pokemon.name === querySearch)
+    // console.log(querySearch)
+    // console.log(nextPokemonElement)
 
     // filter pokemon name === type search
     const pokemonSearchType = newElement.filter(pokemon => pokemon.Type1 && pokemon.Type2 === typeSearch)
@@ -41,13 +43,13 @@ router.get('/pokemons', function (req, res, next) {
     // config response
     if (querySearch) {
       console.log("Reading name response ")
-      res.send(pokemonSearchName);
+      res.send(searchObject);
     } else if (typeSearch) {
       console.log("Reading type response")
-      res.send(pokemonSearchType);
+      res.send(pokemonElement);
     } else {
       console.log("Known data")
-      res.send(data);
+      res.send(dataInDBJSON);
     }
   } catch (error) {
     // config error
@@ -59,20 +61,24 @@ router.get('/api/pokemons/:id', function (req, res, next) {
   try {
     // get params id from request
     const { params, url } = req
-    const id = params.id
-    // console.log({ params, url })
+    const id = Number(params.id)
+    console.log({ params, url })
 
     //get pokemon from db.json
-    const data = JSON.parse(fs.readFileSync("db.json", 'utf8'));
-    const products = data.products;
-    // console.log(products)
+    const dataInDBJSON = JSON.parse(fs.readFileSync("db.json", 'utf8'));
+    const data = dataInDBJSON.data;
+    // console.log(data)
 
     // filter pokemons by id
-    pokemons = products.filter(element => element.id === Number(id));
-    // console.log(pokemons)
+    pokemons = data.find(element => element.id === id);
+
+    const previousPokemonElement = data.find((pokemon) => Number(pokemon.id) === id - 1)
+    const nextPokemonElement = data.find((pokemon) => Number(pokemon.id) === id + 1)
+    const detail = { data: { pokemon: pokemons, previousPokemon: previousPokemonElement, nextPokemon: nextPokemonElement } }
+    console.log(pokemons)
 
     console.log('done filtering pokemon')
-    res.send(pokemons)
+    res.send(detail)
   } catch (error) {
     // config error
     next(error);
