@@ -75,7 +75,7 @@ router.get('/pokemons/:id', function (req, res, next) {
     const previousPokemonElement = data.find((pokemon) => Number(pokemon.id) === id - 1)
     const nextPokemonElement = data.find((pokemon) => Number(pokemon.id) === id + 1)
     const detail = { data: { pokemon: pokemons, previousPokemon: previousPokemonElement, nextPokemon: nextPokemonElement } }
-    console.log(pokemons)
+    console.log(pokemons, previousPokemonElement, nextPokemonElement)
 
     console.log('done filtering pokemon')
     res.send(detail)

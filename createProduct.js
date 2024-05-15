@@ -1,5 +1,6 @@
 const fs = require("fs");
 const csv = require("csvtojson");
+const { faker } = require("@faker-js/faker")
 
 const createProductPokemon = async () => {
     let newData = await csv().fromFile("pokemon.csv")
@@ -12,8 +13,13 @@ const createProductPokemon = async () => {
     newData = newData.map((element, index) => {
         let url = `http://localhost:5000/images/${index + 1}.png`
         let types = [element.Type1.toLowerCase(), element.Type2.toLowerCase()]
+        let newTypes = types.filter(element => element)
 
-        return { name: element.Name, types: types, id: index + 1, url: url }
+        let height = faker.number.float({ multipleOf: 0.2, min: 0, max: 10 })
+        let weight = faker.number.float({ multipleOf: 0.2, min: 0, max: 10 })
+        // console.log(weight.slice(0, 3))
+
+        return { name: element.Name, height: height + " '", weight: weight + " .lbs", types: newTypes, id: index + 1, url: url }
     })
 
     const totalPokemons = newData.pop()
