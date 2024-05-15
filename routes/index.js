@@ -43,7 +43,7 @@ router.get('/pokemons', function (req, res, next) {
     // config response
     if (querySearch) {
       console.log("Reading name response ")
-      res.send(searchObject);
+      res.send(pokemonSearchType);
     } else if (typeSearch) {
       console.log("Reading type response")
       res.send(pokemonElement);
@@ -57,7 +57,7 @@ router.get('/pokemons', function (req, res, next) {
   }
 });
 
-router.get('/api/pokemons/:id', function (req, res, next) {
+router.get('/pokemons/:id', function (req, res, next) {
   try {
     // get params id from request
     const { params, url } = req
