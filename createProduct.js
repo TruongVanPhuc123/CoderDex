@@ -11,7 +11,7 @@ const createProductPokemon = async () => {
     newData = Array.from(newData)
     // types = newData.map(element => [element.Type1 && element.Type2 !== ''])
     newData = newData.map((element, index) => {
-        let url = `http://localhost:5000/images/${index + 1}.png`
+        let url = `https://coderdex-m2sw.onrender.com/images/${index + 1}.png`
         let types = [element.Type1.toLowerCase(), element.Type2.toLowerCase()]
         let newTypes = types.filter(element => element)
 
