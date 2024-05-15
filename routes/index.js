@@ -11,10 +11,11 @@ router.get('/pokemons', function (req, res, next) {
 
     // get query from request
     const { url, query } = req
-    console.log({ url, query })
+    // console.log({ url, query })
 
     let querySearch = query.search
     let typeSearch = query.type
+    // console.log(typeSearch)
     // let newTypeSearch = typeSearch[0].toUpperCase() + typeSearch.slice(1)
 
     const element = dataInDBJSON.data
@@ -32,8 +33,8 @@ router.get('/pokemons', function (req, res, next) {
       const pokemonElement = newElement.filter(pokemon => String(pokemon.name) === String(querySearch))
       res.send({ data: pokemonElement });
     } else if (typeSearch) {
-      const pokemonSearchType = newElement.filter(pokemon => pokemon.Type1 && pokemon.Type2 === typeSearch)
-      res.send(pokemonSearchType);
+      const pokemonSearchType = newElement.filter(pokemon => String(pokemon.types) === String(typeSearch))
+      res.send({ data: pokemonSearchType });
     } else {
       res.send(dataInDBJSON);
     }
