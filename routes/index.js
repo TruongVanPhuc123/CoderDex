@@ -13,12 +13,11 @@ router.get('/pokemons', function (req, res, next) {
     const { url, query } = req
     console.log({ url, query })
 
-    let querySearch = query.query
+    let querySearch = query.search
     let typeSearch = query.type
     // let newTypeSearch = typeSearch[0].toUpperCase() + typeSearch.slice(1)
 
     const element = dataInDBJSON.data
-    // console.log(element)
     const newElement = element.map(element => {
       return element
     })
@@ -27,30 +26,18 @@ router.get('/pokemons', function (req, res, next) {
     const type = newElement.map(element => element.Type1 && element.Type2)
     const newType = type.filter(element => element !== '')
     newDataType = new Set(newType.map(element => element))
-    // console.log(newDataType)
-
-
-    // filter pokemon name === query search
-    const pokemonElement = newElement.filter((pokemon) => pokemon.name === querySearch)
-    // console.log(querySearch)
-    // console.log(nextPokemonElement)
-
-    // filter pokemon name === type search
-    const pokemonSearchType = newElement.filter(pokemon => pokemon.Type1 && pokemon.Type2 === typeSearch)
-    // console.log(newTypeSearch)
-    // console.log(pokemonSearchType)
 
     // config response
     if (querySearch) {
-      console.log("Reading name response ")
-      res.send(pokemonSearchType);
+      const pokemonElement = newElement.filter(pokemon => String(pokemon.name) === String(querySearch))
+      res.send({ data: pokemonElement });
     } else if (typeSearch) {
-      console.log("Reading type response")
-      res.send(pokemonElement);
+      const pokemonSearchType = newElement.filter(pokemon => pokemon.Type1 && pokemon.Type2 === typeSearch)
+      res.send(pokemonSearchType);
     } else {
-      console.log("Known data")
       res.send(dataInDBJSON);
     }
+
   } catch (error) {
     // config error
     next(error);
